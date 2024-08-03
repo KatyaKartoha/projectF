@@ -112,7 +112,7 @@ def user_name(message):
     name = message.text.lower()
     user_id = message.from_user.id
     data = [user_id, name]
-    bot.send_message(message.chat.id, "Введите свою проблему")
+    bot.send_message(message.chat.id, "Введите свою проблему", reply_markup=support_markup())
     bot.register_next_step_handler(message, problem, data=data)
     print(data)
 
@@ -123,19 +123,25 @@ def problem(message, data):
     #problemka = message.text
     data.append(message.text.lower())
     #data = [problemka]
-    bot.send_message(message.chat.id, "Введите статус проблемы")
+    bot.send_message(message.chat.id, "Введите статус проблемы", reply_markup=support_markup())
     bot.register_next_step_handler(message, problem_status, data=data)
     print(data)
 
 def problem_status(message, data):
+    if message.text == cancel_button:
+        cansel(message)
+        return
     #state = message.text
     data.append(message.text.lower())
     #data = [user_id, problemka]
-    bot.send_message(message.chat.id, "Введите контакт")
+    bot.send_message(message.chat.id, "Введите контакт", reply_markup=support_markup())
     bot.register_next_step_handler(message, contact, data=data)
     print(data)
 
 def contact(message, data):
+    if message.text == cancel_button:
+        cansel(message)
+        return
     #my_con = message.text
     data.append(message.text.lower())
     print(data)
@@ -148,7 +154,7 @@ def contact(message, data):
 
 @bot.message_handler(commands=['details'])
 def deet_handler(message):
-    bot.send_message(message.chat.id, 'Please enter your problem')
+    bot.send_message(message.chat.id, 'Please enter your problem', reply_markup=support_markup())
     user_id = message.from_user.id
     apply = [user_id]
     #projects = manager.get_participance(user_id)
@@ -160,7 +166,7 @@ def detailer(message, apply):
         return
     problem_name = message.text
     apply.append(problem_name.lower())
-    bot.send_message(message.chat.id, 'Оставь комментарий для других пользователей')
+    bot.send_message(message.chat.id, 'Оставь комментарий для других пользователей', reply_markup=support_markup())
     bot.register_next_step_handler(message, set_deets, apply=apply)
 
 def set_deets(message, apply):
@@ -174,12 +180,15 @@ def set_deets(message, apply):
 
 @bot.message_handler(commands=['description'])
 def desc_search_handler(message):
-    bot.send_message(message.chat.id, 'Enter your problem')
+    bot.send_message(message.chat.id, 'Enter your problem', reply_markup=support_markup())
     # prob = message.text
     bot.register_next_step_handler(message, get_prob)
 
 def get_prob(message):
     prob_for_deets = message.text.lower()
+    if message.text == cancel_button:
+        cansel(message)
+        return
     bot.send_message(message.chat.id, "Вот что нашлось")
     #bot.register_next_step_handler(message, continuation, prob=prob)
     desc_get(message, prob_for_deets)
@@ -196,12 +205,15 @@ def desc_get(message, prob_for_deets):
 
 @bot.message_handler(commands=['seek'])
 def participants_handler(message):
-    bot.send_message(message.chat.id, 'Enter your problem')
+    bot.send_message(message.chat.id, 'Enter your problem', reply_markup=support_markup())
     # prob = message.text
     bot.register_next_step_handler(message, prob_con)
 
 def prob_con(message):
     prob = message.text.lower()
+    if message.text == cancel_button:
+        cansel(message)
+        return
     bot.send_message(message.chat.id, "Вот что нашлось")
     #bot.register_next_step_handler(message, continuation, prob=prob)
     continuation(message, prob)
@@ -218,12 +230,15 @@ def continuation(message, prob):
 
 @bot.message_handler(commands=['found'])
 def participants_handler(message):
-    bot.send_message(message.chat.id, 'Enter the name of participant in search')
+    bot.send_message(message.chat.id, 'Enter the name of participant in search', reply_markup=support_markup())
     # prob = message.text
     bot.register_next_step_handler(message, cont)
 
 def cont(message):
     named = message.text.lower()
+    if message.text == cancel_button:
+        cansel(message)
+        return
     bot.send_message(message.chat.id, "Вот что нашлось(/found)")
     #bot.register_next_step_handler(message, contin, named=named)
     contin(message, named)
