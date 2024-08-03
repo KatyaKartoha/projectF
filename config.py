@@ -1,2 +1,2 @@
-TOKEN = ''
-DATABASE = ''
+TOKEN = '7385039112:AAGQuSUq_ot-apOTXOfmea-BUxSppKerSvM'
+DATABASE = 'db.db'
